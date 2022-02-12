@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+
+  db:
+    restart: always
+    container_name: TeleShop_Database
+    image: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/telebot_db/
+    env_file:
+      - ./.secrets/prod/db
+
+  django:
+    restart: always
+    container_name: TeleShop_Django
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["./entrypoint.sh"]
+    volumes:
+      - .:/code
+    env_file:
+      - ./.secrets/prod/db
+      - ./.secrets/prod/django_staff
+    expose:
+      - 8000
+    depends_on:
+      - db
+
+  tele_bot:
+    restart: always
+    container_name: TeleShop_TeleBot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "manage.py", "start_bot"]
+    volumes:
+      - .:/code
+    env_file:
+      - ./.secrets/prod/db
+    depends_on:
+      - db
+      - django
+
+  nginx:
+    restart: always
+    container_name: TeleShop_Nginx
+    build: ./nginx
+    volumes:
+      - .:/code
+    ports:
+      - 80:80
+    links:
+      - django
+    depends_on:
+      - django
+
+volumes:
+  postgres_data:
+
+
