@@ -39,6 +39,7 @@ services:
       - .:/code
     env_file:
       - ./.secrets/prod/db
+      - ./.secrets/prod/bot
     depends_on:
       - db
       - django

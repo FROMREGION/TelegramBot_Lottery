@@ -1,3 +1,3 @@
-from .bot import Bot
+from .bot import run
 
-__all__ = ["Bot"]
+__all__ = ["run"]
