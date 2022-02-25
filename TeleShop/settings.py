@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # user's apps
     'Utils',
     'MessageApp',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -149,5 +150,6 @@ DJANGO_STAFF: list = [{'username': environ.get(f'USERNAME_{index}', f'admin_{ind
 # init all tokens
 
 TOKEN = environ.get('TG_TOKEN')
+CHANNEL_ID = environ.get("CHANNEL_ID")
 
 PARSE_MODE = 'html'
